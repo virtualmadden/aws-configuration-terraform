@@ -1,0 +1,90 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "npm-run-all build:stylus --parallel build:stylus:watch start:dev",
+    "start:dev": "react-scripts start",
+    "build": "npm run build:stylus && react-scripts build",
+    "build:stylus": "stylus src/stylus/app.styl -o src/index.css",
+    "build:stylus:watch": "stylus -w src/stylus/app.styl -o src/index.css",
+    "style": "prettier --write \"{src,test}/**/*.js\"",
+    "lint": "eslint -c package.json src/**/*.js",
+    "lint:fix": "eslint -c package.json --fix src/**/*.js",
+    "check": "npm run style && npm run lint",
+    "test": "react-scripts test",
+    "test:ci": "CI=true react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "sync:prod": "aws s3 sync build/ s3://example.org/ --exclude \"*.DS_Store*\"; exit_status=$?; if [ $exit_status -eq 2 ]; then exit 0; fi; exit $exit_status",
+    "cache-bust:prod": "aws s3 cp build/index.html s3://example.org/ --cache-control max-age=0",
+    "deploy:prod": "npm run sync:prod && npm run cache-bust:prod"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.0",
+    "web-vitals": "^0.2.4"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.1",
+    "@testing-library/user-event": "^12.2.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.1.2",
+    "style-loader": "^2.0.0",
+    "stylus": "^0.54.8"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "plugin:prettier/recommended"
+    ],
+    "rules": {
+      "no-console": 0,
+      "import/no-namespace": 0,
+      "react/display-name": 0
+    },
+    "env": {
+      "browser": true,
+      "node": true
+    }
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "statements": 12,
+        "branches": 4,
+        "functions": 9,
+        "lines": 11
+      }
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$"
+    ]
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "printWidth": 100,
+    "jsxSingleQuote": true
+  }
+}
